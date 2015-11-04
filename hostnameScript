@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+sed -i 's/devices-rpi/devices-kgpi/g' /etc/hosts
+sed -i 's/devices-rpi/devices-kgpi/g' /etc/hostname

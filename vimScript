@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "set nocp" > /home/pi/.vimrc
+echo "set backspace=2" >> /home/pi/.vimrc

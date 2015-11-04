@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e             # Exit at once if we get any errors
+apt-get update
+apt-get upgrade
+apt-get dist-upgrade
+apt-get install screen avahi-daemon netatalk redis-server
+
+sudo pip-3.2 install redis
+sudo pip-3.2 install pyserial
+sudo apt-get install minicom
