@@ -1,4 +1,10 @@
 #!/bin/bash
 set -e
-sed -i 's/devices-rpi/devices-kgpi/g' /etc/hosts
-sed -i 's/devices-rpi/devices-kgpi/g' /etc/hostname
+
+if [ "$1" == "" ]; then
+  echo "usage hostnameScript newHostname"
+  exit 1
+fi 
+
+sed -i 's/raspberrypi/'$1'/g' /etc/hosts
+sed -i 's/raspberrypi/'$1'/g' /etc/hostname
