@@ -6,6 +6,6 @@ apt-get dist-upgrade
 apt-get install screen avahi-daemon netatalk redis-server
 
 sudo apt-get install python3-pip
-sudo pip-3.2 install redis
-sudo pip-3.2 install pyserial
+sudo pip-3 install redis
+sudo pip-3 install pyserial
 sudo apt-get install minicom
