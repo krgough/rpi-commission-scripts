@@ -6,7 +6,7 @@ Login to the new rpi and then clone this repo
 ./commissionScript - Updates the apt packages then installs: screen, avahi-daemon, netatalk, redis-server, minicom, python3-pip
                      & pip3 packages: redis, pyserial
                      
-./vimScript - edits vim config so tha backspace and arrow keys works correctly
+./vimScript - edits vim config so that backspace and arrow keys works correctly
 
 ./hostnameScript <devices-rpiXX.local>  # Relace xx with the rPi number - Sets the hostname to a user friendly name.
 
