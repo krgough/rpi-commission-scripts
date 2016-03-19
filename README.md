@@ -23,7 +23,7 @@ For creating reverse tunnels to a test server:
    - Copy the contents of the pulic key to autorized_keys on the test server
 
 2. Insert an entry in crontab to run createTunnel.sh every 5mins.
-   # Restart the ssh tunnel if it's down - every 5min
+   '#' Restart the ssh tunnel if it's down - every 5min
    */5 * * * * bash /home/pi/google_drive/createTunnel.sh > /dev/null
 
 3. Create an entry in /etc/rc.local to run the script at boot.
