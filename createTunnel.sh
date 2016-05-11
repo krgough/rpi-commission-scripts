@@ -2,7 +2,7 @@
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 
 # Configuration Parameters
-. tunnel_config_file
+. ~/repositories/rpi-commission-scripts/tunnel.conf
 
 createTunnel() {
   # Build the command with the port number

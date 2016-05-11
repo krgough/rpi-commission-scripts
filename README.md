@@ -1,4 +1,4 @@
-rpi-commision-scripts
+rpi-commision-scripts/home/pi/repositories/rpi-commision-scripts
 
 Bash scripts to help commissioning of rPIs for devices test ate 
 
@@ -25,7 +25,7 @@ For creating reverse tunnels to a test server:
 2. Insert an entry in crontab to run createTunnel.sh every 5mins.
    
    '#' Restart the ssh tunnel if it's down - every 5min
-   */5 * * * * bash /home/pi/google_drive/createTunnel.sh > /dev/null
+   */5 * * * * /home/pi/repositories/rpi-commision-scripts/createTunnel.sh > /dev/null
 
 *** Notes on the createTunnel.sh script.
 
@@ -36,9 +36,11 @@ Incoming Traffic >> Port XXXX on server >> Port YY on rpi
 
 We use the following SSH parameters:
 
--o "ExitOnForwardFailure yes" == Exit if the tunnel command fails. ssh would typically return a
-                                 warning but would not exit.  So when checking running processes
-                                 we would think the tunnel was ok, when it has actually failed.
+-o ExitOnForwardFailure=yes    Exit if the tunnel command fails. ssh would typically return a
+                               warning but would not exit.  So when checking running processes
+                               we would think the tunnel was ok, when it has actually failed.
+-o ServerAliveInterval=60      Send null packets every 60s to keep tunnel open (some routers or firewalls
+                               will close stale tunnels if no traffic
 -f = Requests ssh to go to background just before command execution.
      Also redirects stdin from /dev/null (requred for ssh to run in background)
 -N = Do not execute a remote command.  This is useful for just forwarding ports
