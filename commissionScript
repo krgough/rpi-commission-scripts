@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e             # Exit at once if we get any errors
 apt-get update
-apt-get upgrade
-apt-get dist-upgrade
+apt-get -y upgrade
+apt-get -y dist-upgrade
 apt-get install screen avahi-daemon netatalk redis-server minicom
 apt-get install sendmail
 
