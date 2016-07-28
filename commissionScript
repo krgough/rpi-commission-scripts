@@ -12,4 +12,20 @@ sudo pip3 install redis
 sudo pip3 install pyserial
 
 # Audio dependencies
-sudo apt-get install libasound2-dev lame 
+sudo apt-get install libasound2-dev lame
+
+# Check and modify vim settings if required
+vimPath=/home/pi/.vimrc
+
+vimCmds=(
+  "set nocp"
+  "set backspace=2"
+)
+
+for cmd in "${vimCmds[@]}"; do
+    grep -q "$cmd" $vimPath
+    if [ $? -eq 1 ]; then
+        echo "Adding '$cmd' to $vimPath"
+        echo $cmd >> $vimPath
+    fi
+done
