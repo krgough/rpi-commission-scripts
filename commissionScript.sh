@@ -28,6 +28,11 @@ vimCmds=(
   "set nocp"
   "set backspace=2"
 )
+# Check the file exists and if not the create it
+if [ ! -e $vimPath ]; then
+    touch $vimPath
+fi
+# Add the commands if they are not already there
 for cmd in "${vimCmds[@]}"; do
     grep -q "$cmd" $vimPath
     if [ $? -eq 1 ]; then
