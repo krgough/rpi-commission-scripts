@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e             # Exit at once if we get any errors
 
 # Setup the correct hostname 
 if [ "$1" == "" ]; then
@@ -45,10 +44,10 @@ done
 apt-get update
 apt-get -y upgrade
 apt-get -y dist-upgrade
-apt-get install screen avahi-daemon netatalk redis-server minicom
-apt-get install sendmail
+apt-get -y install screen avahi-daemon netatalk redis-server minicom
+apt-get -y install sendmail
 
 # Configure Python
-sudo apt-get install python3-pip
+sudo -y apt-get install python3-pip
 sudo pip3 install redis
 sudo pip3 install pyserial
