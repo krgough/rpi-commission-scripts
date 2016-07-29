@@ -43,9 +43,6 @@ apt-get -y dist-upgrade
 apt-get install screen avahi-daemon netatalk redis-server minicom
 apt-get install sendmail
 
-# Audio dependencies
-sudo apt-get install libasound2-dev lame
-
 # Configure Python
 sudo apt-get install python3-pip
 sudo pip3 install redis
