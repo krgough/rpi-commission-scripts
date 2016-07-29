@@ -9,7 +9,7 @@ repoNames=(
   "audio-event-monitor"
 )
 
-localRepoDir='/home/pi/junk/repositories/'
+localRepoDir='/home/pi/repositories/audioRespository/'
 
 # Create github repos
 echo "*** Cloning audio repos from Github..."
@@ -28,3 +28,15 @@ for rName in ${repoNames[@]}; do
 done # end of for loop
 
 # Do other audio config here
+# Create audio-user account
+# Tunnel config & enable
+# ipMailer config & enable
+# test email
+# audio-notification config
+# audio-event-monitor make
+# mkdir /home/pi/repositories/audioRepository/audio-event-monitor/logs
+# crontab = createTunnel
+#         = checkGainAndAgc
+#         = start-audio-event-monito
+#         = audoEventNotifier
+#         = checkOnlineStatus
