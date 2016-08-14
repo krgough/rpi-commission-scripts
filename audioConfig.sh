@@ -34,9 +34,15 @@ done # end of for loop
 # test email
 # audio-notification config
 # audio-event-monitor make
-# mkdir /home/pi/repositories/audioRepository/audio-event-monitor/logs
-# crontab = createTunnel
-#         = checkGainAndAgc
-#         = start-audio-event-monito
-#         = audoEventNotifier
-#         = checkOnlineStatus
+
+logDir='$localRepoDir/audio-event-monitor/logs'
+if [ -d "$logDir" ]; then
+    echo $logDir - Directory already exists, skipping...
+else
+    mkdir $logDir
+
+# mkdir $localRepoDir/audio-event-monitor/logs
+
+# Install the cron jobs as listed in the crontab backup file.
+Echo "Installing cron jobs..."
+crontab audioCrontabBackup.txt
