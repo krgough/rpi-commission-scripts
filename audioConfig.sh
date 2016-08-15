@@ -37,9 +37,30 @@ else
 fi
 
 # Tunnel config & enable
+echo
+echo "*** Creating the tunnel config file..."
+tcf='/home/pi/repositories/rpi-commission-scripts/tunnel.conf'
+if [ -f "$tcf" ]; then
+    echo Tunnel config already exists, skipping...
+else
+    port=22$(hostname | grep -o '[0-9][0-9]')
+    echo port=\"$port\" > $tcf
+    echo server_alias=\"audio_aws\" >> $tcf
+fi
+
 # ipMailer config & enable
-# test email
+echo
+echo "*** Configuring ipMailer..."
+sudo cp rc.local.backup /etc/rc.local
+
 # audio-notification config
+echo
+echo "*** Setting keith.gough@bgch.co.uk as default email address for notifications, edit this for each user."
+if [ -f "/home/pi/repositories/audioRepository/audio-notifications/userEmail.txt" ]; then
+    echo "userEmail.txt already exists (in audio-notifications), skipping..."
+else
+    echo keith.gough@bgch.co.uk > /home/pi/repositories/audioRepository/audio-notifications/userEmail.txt
+fi
 
 # audio-event-monitor make
 echo
@@ -61,3 +82,8 @@ fi
 echo
 echo "*** Installing cron jobs..."
 crontab audioCrontabBackup.txt
+
+# audio-notification-config
+echo
+echo "*** Now insert the users email address into the userEmail.txt file"
+echo vi $localRepoDir/audio-notifications/userEmail.txt
