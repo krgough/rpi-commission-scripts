@@ -36,7 +36,12 @@ else
     sudo adduser audio-user
 fi
 
-# Tunnel config & enable
+# Give all users access to /etc/wpa_supplicant/wpa_supplicant.conf
+echo
+echo "*** Giving all users access to wpa_supplicant.conf"
+sudo chmod o+w /etc/wpa_supplicant/wpa_supplicant.conf
+
+# Tunnel config
 echo
 echo "*** Creating the tunnel config file..."
 tcf='/home/pi/repositories/rpi-commission-scripts/tunnel.conf'
@@ -48,7 +53,7 @@ else
     echo server_alias=\"audio_aws\" >> $tcf
 fi
 
-# ipMailer config & enable
+# ipMailer - edit rc.local to run the script at startup
 echo
 echo "*** Configuring ipMailer..."
 sudo cp rc.local.backup /etc/rc.local
@@ -70,12 +75,12 @@ make -C /home/pi/junk/repositories/audioRespository/audio-event-monitor/
 # Create the log folder for audio-event-monitor
 echo
 echo "*** Creating log directory..."
-logDir=$localRepoDir/audio-event-monitor/logs
+logDir="$localRepoDir"audio-event-monitor/logs
 if [ -d "$logDir" ]; then
     echo $logDir - Directory already exists, skipping...
 else
     echo Creating log directory $logDir...
-    mkdir $logDir
+    mkdir "$logDir"
 fi
 
 # Install the cron jobs as listed in the crontab backup file.
@@ -85,5 +90,5 @@ crontab audioCrontabBackup.txt
 
 # audio-notification-config
 echo
-echo "*** Now insert the users email address into the userEmail.txt file"
+echo "*** REMEMBER: insert the users email address into the userEmail.txt file"
 echo vi $localRepoDir/audio-notifications/userEmail.txt
