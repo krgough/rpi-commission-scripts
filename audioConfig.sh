@@ -10,7 +10,7 @@ repoNames=(
   "corelogger_sdk"
 )
 
-localRepoDir='/home/pi/repositories/audioRespository/'
+localRepoDir='/home/pi/repositories/audioRepository/'
 
 # Create github repos
 echo "*** Cloning audio repos from Github..."
@@ -61,10 +61,11 @@ sudo cp rc.local.backup /etc/rc.local
 # audio-notification config
 echo
 echo "*** Setting keith.gough@bgch.co.uk as default email address for notifications, edit this for each user."
-if [ -f "/home/pi/repositories/audioRepository/audio-notifications/userEmail.txt" ]; then
+emailFile="$localRepoDir"audio-notifications/userEmail.txt
+if [ -f "$emailFile" ]; then
     echo "userEmail.txt already exists (in audio-notifications), skipping..."
 else
-    echo keith.gough@bgch.co.uk > /home/pi/repositories/audioRepository/audio-notifications/userEmail.txt
+    echo keith.gough@bgch.co.uk > "$emailFile"
 fi
 
 # audio-event-monitor make
