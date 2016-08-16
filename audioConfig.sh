@@ -10,7 +10,7 @@ repoNames=(
   "corelogger_sdk"
 )
 
-localRepoDir='/home/pi/junk/repositories/audioRespository/'
+localRepoDir='/home/pi/repositories/audioRespository/'
 
 # Create github repos
 echo "*** Cloning audio repos from Github..."
