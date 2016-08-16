@@ -48,6 +48,6 @@ apt-get -y install screen avahi-daemon netatalk redis-server minicom
 apt-get -y install sendmail
 
 # Configure Python
-sudo -y apt-get install python3-pip
+sudo apt-get -y install python3-pip
 sudo pip3 install redis
 sudo pip3 install pyserial

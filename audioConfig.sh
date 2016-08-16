@@ -68,10 +68,32 @@ else
     echo keith.gough@bgch.co.uk > "$emailFile"
 fi
 
+# Install the libasound-2dev lnd lame libraries
+echo
+echo "*** Installing libasound2-dev and lame"
+sudo apt-get -y install libasound2-dev lame
+
+# Install the boto3 library
+echo
+echo "*** Installing boto3 library"
+sudo pip3 install boto3
+
+# Configure Boto3 credentials
+echo
+echo "*** Setting up boto3 credentials"
+botoCreds="/home/pi/.boto"
+if [ -f "$botoCreds" ]; then
+    echo ".boto file already exists, skipping..."
+else
+    echo "[Credentials]" > "$botoCreds"
+    echo "aws_access_key_id = AKIAJGHXN2IHJ3XMBV7Q" >> "$botoCreds"
+    echo "aws_secret_access_key = 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" >> "$botoCreds"
+fi
+
 # audio-event-monitor make
 echo
 echo "*** Make audio-event-monitor..."
-make -C /home/pi/junk/repositories/audioRespository/audio-event-monitor/
+make -C "$localRepoDir"audio-event-monitor/
 
 # Create the log folder for audio-event-monitor
 echo
