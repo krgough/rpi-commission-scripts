@@ -39,7 +39,7 @@ fi
 # Give all users access to /etc/wpa_supplicant/wpa_supplicant.conf
 echo
 echo "*** Giving all users access to wpa_supplicant.conf"
-sudo chmod o+w /etc/wpa_supplicant/wpa_supplicant.conf
+sudo chmod o+rw /etc/wpa_supplicant/wpa_supplicant.conf
 
 # Tunnel config
 echo
