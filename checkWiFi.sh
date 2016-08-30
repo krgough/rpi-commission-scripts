@@ -22,7 +22,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 LOGFILE=/tmp/checkWiFi.sh.log
 RETAIN_NUM_LINES=10
 WLAN="wlan0"
-PING_IP=192.168.0.254
+PING_IP=192.168.1.254
 
 # Grab last few lines from the logfile and then redirect any output
 # from this script to the logfile.
