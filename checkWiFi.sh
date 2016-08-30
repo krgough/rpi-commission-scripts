@@ -26,7 +26,7 @@ PING_IP=192.168.1.254
 
 # Grab last few lines from the logfile and then redirect any output
 # from this script to the logfile.
-function logsetup {
+function logSetup {
   TMP=$(tail -n $RETAIN_NUM_LINES $LOGFILE 2>/dev/null) && echo "${TMP}" > LOGFILE
   exec > >(tee -a $LOGFILE)
   exec 2>&1
@@ -35,6 +35,9 @@ function logsetup {
 function log {
   echo "[$(date)]: $*"
 }
+
+# Setup the logger feature
+logSetup
 
 # Ping the router
 log "Performing network check for $WLAN"
