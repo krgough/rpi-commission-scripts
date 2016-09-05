@@ -20,7 +20,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 #####################################################################
 
 # Logfile path and max file size (in lines) defined here
-LOGFILE=/tmp/checkWiFi.sh.log
+LOGFILE=/home/pi/checkWiFi.sh.log
 RETAIN_NUM_LINES=10
 WLAN="wlan0"
 PING_IP=192.168.1.254
