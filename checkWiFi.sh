@@ -17,6 +17,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 # The script will be run be CRON every 5mins. Add this to the crontab
 # */5 * * * * /home/repositories/rpi-commission-scripts/checkWiFi.sh
 #
+#####################################################################
 
 # Logfile path and max file size (in lines) defined here
 LOGFILE=/tmp/checkWiFi.sh.log
@@ -40,7 +41,7 @@ function log {
 logSetup
 
 # Ping the router
-log "Performing network check for $WLAN"
+echo "Performing network check for $WLAN"
 /bin/ping -c2 -I $WLAN $PING_IP > /dev/null 2> /dev/null
 if [ $? -ne 0 ] ; then
   log "Network connection is down.  Attempting reconnection."
@@ -48,5 +49,5 @@ if [ $? -ne 0 ] ; then
   sleep 5
   /sbin/ifup $WLAN
 else
-  log "Network is OK."
+  echo "Network is OK."
 fi
