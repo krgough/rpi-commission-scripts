@@ -45,7 +45,13 @@ apt-get update
 apt-get -y upgrade
 apt-get -y dist-upgrade
 apt-get -y install screen avahi-daemon netatalk redis-server minicom
-apt-get -y install sendmail
+apt-get -y install mailutils
+
+# Modify the postfix config file if necessary
+if ! grep -q "inet_protocols = ipv4" /etc/postfix/main.cf; then
+    echo "Adding line to end of /etc/postfix/main.cf to force ipv4 only"
+    echo inet_protocols = ipv4 | sudo tee -a /etc/postfix/main.cf
+fi
 
 # Configure Python
 sudo apt-get -y install python3-pip

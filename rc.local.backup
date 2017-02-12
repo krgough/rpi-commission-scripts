@@ -14,9 +14,12 @@
 # KG: pause to wait for wifi to connect
 sleep 30
 
-_IP=$(hostname -I) || true
+_IP=$(hostname -I | awk -F " " '{print$1}') || true
 if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
+
+  # KG: restart postfix to copy the resolv.conf file after DNS has been setup
+  sudo service postfix restart
 
   # KG: Adding this to email out IP address on reboot
   /home/pi/repositories/rpi-commission-scripts/ip_mailer.sh
