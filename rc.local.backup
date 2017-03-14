@@ -22,7 +22,7 @@ if [ "$_IP" ]; then
   sudo service postfix restart
 
   # KG: Adding this to email out IP address on reboot
-  /home/pi/repositories/rpi-commission-scripts/ip_mailer.sh
+  /home/pi/repositories/rpi-commission-scripts/ip_mailer_postfix.sh
 fi
 
 exit 0

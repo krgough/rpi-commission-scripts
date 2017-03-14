@@ -40,18 +40,31 @@ for cmd in "${vimCmds[@]}"; do
     fi
 done
 
-# Update the distro and install some dependencies
+# Update the distro, remove some junk and install some dependencies
+apt-get remove --purge libreoffice-*
+apt-get remove --purge wolfram-engine
+apt-get remove --purge plymouth
+apt-get remove --purge nodered
+apt-get remove --purge sonic-pi
+apt-get clean
+
 apt-get update
-apt-get -y upgrade
 apt-get -y dist-upgrade
 apt-get -y install screen avahi-daemon netatalk redis-server minicom
 apt-get -y install mailutils
+apt-get -y install postfix
 
 # Modify the postfix config file if necessary
 if ! grep -q "inet_protocols = ipv4" /etc/postfix/main.cf; then
     echo "Adding line to end of /etc/postfix/main.cf to force ipv4 only"
     echo inet_protocols = ipv4 | sudo tee -a /etc/postfix/main.cf
 fi
+
+# Update rc.local to send an email with ip addr on reboot and
+# restart the postfix service after raspian has had a chance to setup the resolv.conf (DNS).
+# Postfix copies this file and if it start too soon after boot it copies an empty file.
+# Restarting later resolves this…
+cat rc.local.backup | sudo tee /etc/rc.local > /dev/null
 
 # Configure Python
 sudo apt-get -y install python3-pip
