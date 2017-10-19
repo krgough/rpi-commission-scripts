@@ -1,14 +1,20 @@
 #!/bin/bash
 
+# Change to the wanted working directory
+cd /home/pi/repositories/rpi-commission-scripts
+
 # Setup the correct hostname 
-if [ "$1" == "" ]; then
-  echo "usage commissionScript newHostname"
+if [ -z $1 ] || [ -z $2 ]; then
+  echo "usage: $0 newHostname aws_port"
   exit 1
 fi
 
+HN=$1
+AWS_PORT=$2
+
 # Modify the /etc/hosts file
 # sendmail needs the <hostname.local> entry
-hosts="$1 $1.local"
+hosts="$HN $HN.local"
 resp=$(grep "127.0.1.1" /etc/hosts)
 echo "Removing from /etc/hosts:    $resp"
 sudo sed -i '/127.0.1.1/d' /etc/hosts
@@ -18,10 +24,20 @@ echo "127.0.1.1 $hosts" | sudo tee -a /etc/hosts > /dev/null
 # Modify the /etc/hostname file
 resp=$(cat /etc/hostname)
 echo "Removing from /etc/hostname: $resp"
-echo "Adding to /etc/hostname:     $1"
-echo $1 | sudo tee /etc/hostname > /dev/null
+echo "Adding to /etc/hostname:     $HN"
+echo $HN | sudo tee /etc/hostname > /dev/null
+
+# Create the tunnel.conf file
+echo "Creating tunnel configuration..."
+echo "port="$AWS_PORT"" > /home/pi/repositories/rpi-commission-scripts/tunnel.conf
+echo "server_alias="audio_aws"" >> /home/pi/repositories/rpi-commission-scripts/tunnel.conf
+
+# Create a basic crontab with the tunnel task
+echo "Adding tunnel setup to crontab..."
+crontab -u pi /home/pi/repositories/rpi-commission-scripts/crontabBackup.txt
 
 # Check and modify vim settings if required
+echo "Modifying vi config..."
 vimPath=/home/pi/.vimrc
 vimCmds=(
   "set nocp"
@@ -41,18 +57,15 @@ for cmd in "${vimCmds[@]}"; do
 done
 
 # Update the distro, remove some junk and install some dependencies
-apt-get remove --purge libreoffice-*
-apt-get remove --purge wolfram-engine
-apt-get remove --purge plymouth
-apt-get remove --purge nodered
-apt-get remove --purge sonic-pi
-apt-get clean
+echo "Updating package files..."
+apt-get -qq remove --purge libreoffice-* wolfram-engine plymouth nodered sonic-pi
+apt-get -qq clean
 
 apt-get update
-apt-get -y dist-upgrade
-apt-get -y install screen avahi-daemon netatalk redis-server minicom
-apt-get -y install mailutils
-apt-get -y install postfix
+apt-get -y -qq dist-upgrade
+apt-get -y -qq install screen avahi-daemon netatalk redis-server minicom
+apt-get -y -qq install mailutils postfix
+apt-get -y -qq install i2c-tools python3-smbus
 
 # Modify the postfix config file if necessary
 if ! grep -q "inet_protocols = ipv4" /etc/postfix/main.cf; then
@@ -64,9 +77,10 @@ fi
 # restart the postfix service after raspian has had a chance to setup the resolv.conf (DNS).
 # Postfix copies this file and if it start too soon after boot it copies an empty file.
 # Restarting later resolves this…
+echo "Updating rc.local to send ip addr email on boot..."
 cat rc.local.backup | sudo tee /etc/rc.local > /dev/null
 
 # Configure Python
-sudo apt-get -y install python3-pip
-sudo pip3 install redis
-sudo pip3 install pyserial
+echo "Installing python libs..."
+sudo apt-get -y -qq install python3-pip
+sudo pip3 install -q redis requests pyserial
