@@ -64,8 +64,12 @@ apt-get -qq clean
 apt-get update
 apt-get -y -qq dist-upgrade
 apt-get -y -qq install screen avahi-daemon netatalk redis-server minicom
-apt-get -y -qq install mailutils postfix
 apt-get -y -qq install i2c-tools python3-smbus
+
+# Install the email server
+debconf-set-selections <<< "postfix postfix/mailname string $HN"
+debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
+apt-get -y -qq install mailutils postfix
 
 # Modify the postfix config file if necessary
 if ! grep -q "inet_protocols = ipv4" /etc/postfix/main.cf; then
