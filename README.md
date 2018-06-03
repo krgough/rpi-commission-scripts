@@ -7,8 +7,6 @@ Login to the new rpi and then clone this repo
 ./commissionScript - Updates the apt packages then installs various dependencies
                      edits vim config so that backspace and arrow keys works correctly
 
-./hostnameScript <devices-rpiXX.local>  # Relace xx with the rPi number - Sets the hostname to a user friendly name.
-
 For creating reverse tunnels to a test server:
 
 1. Create keys for the rPi to login to the server

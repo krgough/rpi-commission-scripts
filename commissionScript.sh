@@ -4,13 +4,14 @@
 cd /home/pi/repositories/rpi-commission-scripts
 
 # Setup the correct hostname 
-if [ -z $1 ] || [ -z $2 ]; then
-  echo "usage: $0 newHostname aws_port"
+if [ -z $1 ] || [ -z $2 ] || [ -z $3 ]; then
+  echo "usage: $0 newHostname aws_port kgpython_password"
   exit 1
 fi
 
 HN=$1
 AWS_PORT=$2
+EMAIL_PASS=$3
 
 # Modify the /etc/hosts file
 # sendmail needs the <hostname.local> entry
@@ -64,27 +65,25 @@ apt-get -qq clean
 apt-get update
 apt-get -y -qq dist-upgrade
 apt-get -y -qq install screen avahi-daemon netatalk redis-server minicom
-apt-get -y -qq install i2c-tools python3-smbus
+apt-get -y -qq install i2c-tools
+# apt-get -y -qq install python3-smbus (depricated in favour of pip3 install smbus2)
 
 # Install the email server
-debconf-set-selections <<< "postfix postfix/mailname string $HN"
-debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
-apt-get -y -qq install mailutils postfix
+apt-get -y -qq install ssmtp mailutils
 
-# Modify the postfix config file if necessary
-if ! grep -q "inet_protocols = ipv4" /etc/postfix/main.cf; then
-    echo "Adding line to end of /etc/postfix/main.cf to force ipv4 only"
-    echo inet_protocols = ipv4 | sudo tee -a /etc/postfix/main.cf
-fi
+# Modify the ssmtp config file
+SSMTP_CFG="/etc/ssmtp/ssmtp.conf"
+EMAIL="kgpython@gmail.com"
+sed -i "s/root=postmaster/root=$EMAIL/" $SSMTP_CFG
+sed -i "s/mailhub=mail/mailhub=smtp.gmail.com:587/" $SSMTP_CFG
+sed -i "s/#FromLineOverride=YES/FromLineOverride=YES/" $SSMTP_CFG
+echo -e "/nAuthUser=$EMAIL/nAuthPass=$EMAIL_PASS/nUseSTARTTLS=YES/nUseTLS=YES" >> $SSMTP_CFG
 
-# Update rc.local to send an email with ip addr on reboot and
-# restart the postfix service after raspian has had a chance to setup the resolv.conf (DNS).
-# Postfix copies this file and if it start too soon after boot it copies an empty file.
-# Restarting later resolves this…
+# Update rc.local to send an email with ip addr on reboot
 echo "Updating rc.local to send ip addr email on boot..."
 cat rc.local.backup | sudo tee /etc/rc.local > /dev/null
 
 # Configure Python
 echo "Installing python libs..."
 sudo apt-get -y -qq install python3-pip
-sudo pip3 install -q redis requests pyserial
+sudo pip3 install -q redis requests pyserial smbus2
