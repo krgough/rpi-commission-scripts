@@ -18,10 +18,10 @@ For creating reverse tunnels to a test server:
 
    - Copy the contents of the pulic key to autorized_keys on the test server
 
-2. Insert an entry in crontab to run createTunnel.sh every 5mins.
+2. Insert an entry in crontab to run createTunnel.sh every 1mins.
    
-   '#' Restart the ssh tunnel if it's down - every 5min
-   */5 * * * * /home/pi/repositories/rpi-commision-scripts/createTunnel.sh > /dev/null
+   '#' Restart the ssh tunnel if it's down - every 1min
+   * * * * * /home/pi/repositories/rpi-commision-scripts/createTunnel.sh > /dev/null
 
 *** Notes on the createTunnel.sh script.
 
@@ -53,3 +53,38 @@ is therefore excluded from the response returned from grep
 e.g. ps ax | grep [w]antedProcesString
 
 We use "eval $cmd" as this makes the command execute correctly with the included pipe.
+
+*** Note on setting up mail on rPi
+
+Generate an application email password for the gmail account as follows:
+Manage Google Acccount > Security > Signing into Google - App Passwords.
+Create a password for the particular app/device and make a note of the password.
+
+edit /etc/smtp/smtp.config to be as follows.
+
+#
+# Config file for sSMTP sendmail
+#
+# The person who gets all mail for userids < 1000
+# Make this empty to disable rewriting.
+root=<Insert the gmail email address here>
+
+# The place where the mail goes. The actual machine name is required no 
+# MX records are consulted. Commonly mailhosts are named mail.domain.com
+mailhub=smtp.gmail.com:587
+
+# Where will the mail seem to come from?
+#rewriteDomain=
+
+# The full hostname
+hostname=<devices-sniffer09 or other device hostname>
+
+# Are users allowed to set their own From: address?
+# YES - Allow the user to specify their own From: address
+# NO - Use the system generated From: address
+FromLineOverride=YES
+
+AuthUser=<Insert the gmail email address here>
+AuthPass=<Insert the google password here>
+UseSTARTTLS=YES
+UseTLS=YES

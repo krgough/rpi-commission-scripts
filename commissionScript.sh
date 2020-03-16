@@ -1,9 +1,11 @@
 #!/bin/bash
 
-# Change to the wanted working directory
-cd /home/pi/repositories/rpi-commission-scripts
+if [ "$(id -u)" -ne "0" ]; then
+    echo "This script must be executed with root priviledges"
+    exit 1
+fi
 
-# Setup the correct hostname 
+# Setup the correct hostname
 if [ -z $1 ] || [ -z $2 ] || [ -z $3 ]; then
   echo "usage: $0 newHostname aws_port kgpython_password"
   exit 1
@@ -12,6 +14,9 @@ fi
 HN=$1
 AWS_PORT=$2
 EMAIL_PASS=$3
+
+# Change to the wanted working directory
+cd /home/pi/repositories/rpi-commission-scripts
 
 # Modify the /etc/hosts file
 # sendmail needs the <hostname.local> entry
@@ -31,7 +36,7 @@ echo $HN | sudo tee /etc/hostname > /dev/null
 # Create the tunnel.conf file
 echo "Creating tunnel configuration..."
 echo "port="$AWS_PORT"" > /home/pi/repositories/rpi-commission-scripts/tunnel.conf
-echo "server_alias="audio_aws"" >> /home/pi/repositories/rpi-commission-scripts/tunnel.conf
+echo "server_alias="sniffer_aws"" >> /home/pi/repositories/rpi-commission-scripts/tunnel.conf
 
 # Create a basic crontab with the tunnel task
 echo "Adding tunnel setup to crontab..."
@@ -77,7 +82,7 @@ EMAIL="kgpython@gmail.com"
 sed -i "s/root=postmaster/root=$EMAIL/" $SSMTP_CFG
 sed -i "s/mailhub=mail/mailhub=smtp.gmail.com:587/" $SSMTP_CFG
 sed -i "s/#FromLineOverride=YES/FromLineOverride=YES/" $SSMTP_CFG
-echo -e "/nAuthUser=$EMAIL/nAuthPass=$EMAIL_PASS/nUseSTARTTLS=YES/nUseTLS=YES" >> $SSMTP_CFG
+echo -e "\nAuthUser=$EMAIL\nAuthPass=$EMAIL_PASS\nUseSTARTTLS=YES\nUseTLS=YES" >> $SSMTP_CFG
 
 # Update rc.local to send an email with ip addr on reboot
 echo "Updating rc.local to send ip addr email on boot..."
@@ -85,5 +90,10 @@ cat rc.local.backup | sudo tee /etc/rc.local > /dev/null
 
 # Configure Python
 echo "Installing python libs..."
-sudo apt-get -y -qq install python3-pip
-sudo pip3 install -q redis requests pyserial smbus2
+apt-get -y -qq install python3-pip rsync
+pip3 install -q redis requests pyserial smbus2
+
+echo ""
+echo "Reboot the hub first and then sort out the ssh keys"
+echo "Run ssh-keygen to create ssh keys"
+echo "Copy the public key to the aws server authorized_users file for user sniffer-user"

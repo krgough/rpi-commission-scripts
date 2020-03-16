@@ -12,7 +12,7 @@
 # By default this script does nothing.
 
 # KG: pause to wait for wifi to connect
-sleep 30
+sleep 120
 
 _IP=$(hostname -I | awk -F " " '{print$1}') || true
 if [ "$_IP" ]; then

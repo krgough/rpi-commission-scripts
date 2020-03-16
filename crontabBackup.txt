@@ -22,5 +22,5 @@
 # m h  dom mon dow   command
 
 # KG: REVERSE TUNNEL
-# Restart the ssh tunnel if it's down - every 5min
-*/5 * * * * /home/pi/repositories/rpi-commission-scripts/createTunnel.sh > /dev/null 2>&1
+# Restart the ssh tunnel if it's down - every 1min
+* * * * * /home/pi/repositories/rpi-commission-scripts/createTunnel.sh > /dev/null 2>&1
