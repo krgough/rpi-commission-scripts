@@ -1,13 +1,40 @@
-rpi-commision-scripts/home/pi/repositories/rpi-commision-scripts
+# Bash scripts to help commissioning of RaspberryPis
 
-Bash scripts to help commissioning of rPIs for devices test ate 
+These scripts are typically installed in the following directory:  
+/home/pi/repositories/rpi-commission-scripts
 
-Login to the new rpi and then clone this repo
+## commissionScript.py
 
-./commissionScript - Updates the apt packages then installs various dependencies
-                     edits vim config so that backspace and arrow keys works correctly
+Run commissionScript.py to set the following:
 
-For creating reverse tunnels to a test server:
+1) Setup the wanted hostname
+2) Create tunneling configuration (if required), to setup and maintain a reverse ssh tunnel to an external server.  This allows remote access to the rPi via an AWS EC2 instance or any other server with a fixed IP address.
+3) Modify .vimrc to support backspace and arrows for up/down etc.
+4) apt update and apt upgrade.
+5) Install various useful packages (screen, minicom , avahi-deamon, ssmtp, mailutils and others)
+6) setup ssmtp to email kgpython@gmail.com when the device reboots (with the device IP address).
+7) Install python pip3
+8) Show instructions for creating device ssh key.
+
+## commissionScript Usage:
+
+```
+Usage: ./commissionScript.py new_hostname aws_port kgpython_password
+
+new_hostname = The new hostname you want to give the rPi
+aws_port = Port number to use for reverse tunnel.  Use 0000 if not required.
+kgpython_password = application password for gmail for kgpython@gmail.com.  See below.
+```
+
+## Generating an application email password for Gmail
+Generate an application email password for the gmail account as follows:
+Manage Google Acccount > Security > Signing into Google - App Passwords.
+Create a password for the particular app/device and make a note of the password.
+
+
+## Reverse Tunnel
+
+For creating reverse tunnels to a test server (server with a fixed IP address):
 
 1. Create keys for the rPi to login to the server
 
@@ -18,12 +45,12 @@ For creating reverse tunnels to a test server:
 
    - Copy the contents of the pulic key to autorized_keys on the test server
 
-2. Insert an entry in crontab to run createTunnel.sh every 1mins.
+2. Insert an entry in crontab to run createTunnel.sh every 1mins (commissionScript.py will do this).
    
    '#' Restart the ssh tunnel if it's down - every 1min
    * * * * * /home/pi/repositories/rpi-commision-scripts/createTunnel.sh > /dev/null
 
-*** Notes on the createTunnel.sh script.
+### Notes on the createTunnel.sh script.
 
 ssh to server (defined in .ssh/config) and create a reverse tunnel to redirect traffic sent
 to port XXXX  on remote machine to the local machine on port YY.
@@ -54,7 +81,7 @@ e.g. ps ax | grep [w]antedProcesString
 
 We use "eval $cmd" as this makes the command execute correctly with the included pipe.
 
-*** Note on setting up mail on rPi
+## Notes on setting up mail on rPi
 
 Generate an application email password for the gmail account as follows:
 Manage Google Acccount > Security > Signing into Google - App Passwords.
@@ -62,6 +89,7 @@ Create a password for the particular app/device and make a note of the password.
 
 edit /etc/smtp/smtp.config to be as follows.
 
+```
 #
 # Config file for sSMTP sendmail
 #
@@ -77,7 +105,7 @@ mailhub=smtp.gmail.com:587
 #rewriteDomain=
 
 # The full hostname
-hostname=<devices-sniffer09 or other device hostname>
+hostname=<Insert the device hostname here>
 
 # Are users allowed to set their own From: address?
 # YES - Allow the user to specify their own From: address
@@ -85,6 +113,9 @@ hostname=<devices-sniffer09 or other device hostname>
 FromLineOverride=YES
 
 AuthUser=<Insert the gmail email address here>
-AuthPass=<Insert the google password here>
+AuthPass=<Insert the google application password here>
 UseSTARTTLS=YES
 UseTLS=YES
+
+```
+
