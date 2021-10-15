@@ -69,12 +69,8 @@ apt-get -qq clean
 
 apt-get update
 apt-get -y -qq dist-upgrade
-apt-get -y -qq install screen avahi-daemon netatalk redis-server minicom
-apt-get -y -qq install i2c-tools
+apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools ssmtp mailutils python3-pip rsync
 # apt-get -y -qq install python3-smbus (depricated in favour of pip3 install smbus2)
-
-# Install the email server
-apt-get -y -qq install ssmtp mailutils
 
 # Modify the ssmtp config file
 SSMTP_CFG="/etc/ssmtp/ssmtp.conf"
@@ -90,7 +86,6 @@ cat rc.local.backup | sudo tee /etc/rc.local > /dev/null
 
 # Configure Python
 echo "Installing python libs..."
-apt-get -y -qq install python3-pip rsync
 pip3 install -q redis requests pyserial smbus2
 
 echo ""
