@@ -1,11 +1,14 @@
 # Bash scripts to help commissioning of RaspberryPis
 
-Use 'initial-setup.sh' to copy these files to a new rPi.
-
-Usage: initial-setup.sh ipaddress_of_rpi
-
+Use 'initial-setup.sh' to copy these files to a new rPi.  
 These scripts are installed in the following directory on the rPi:  
 /home/pi/repositories/rpi-commission-scripts
+
+```
+
+Usage: ./initial-setup.sh ipaddress_of_rpi
+
+```
 
 ## commissionScript.py
 
