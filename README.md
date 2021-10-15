@@ -128,3 +128,45 @@ UseTLS=YES
 
 ```
 
+# Setup MSMTP
+
+Using email on newer rpi builds. smtp no longer supported so use msmtp instead.
+
+```
+sudo apt install msmtp msmtp-mta
+```
+
+Put the following into /etc/aliases
+
+```
+# Send root to
+root: keith.gough@hivehome.com
+# Send cron to
+cron: keith.gough@hivehome.com
+# Send everything else to
+default: keith.gough@hivehome.com
+
+Put the following into /etc/msmtprc 
+# Generics
+defaults
+auth           on
+tls            on
+# following is different from ssmtp:
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+# user specific log location, otherwise use /var/log/msmtp.log, however, 
+# this will create an access violation if you are user pi, and have not changes the access rights
+#logfile        ~/.msmtp.log
+
+# Gmail specifics
+account        gmail
+host           smtp.gmail.com
+port           587
+
+from          root@raspi-buster
+user          kgpython@gmail.com
+password      jvwuigwvbmuwwbhh
+
+# Default
+account default : gmail
+```
+
