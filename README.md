@@ -12,22 +12,24 @@ These scripts are installed in the following directory on the rPi:
 Run commissionScript.py to set the following:
 
 1) Setup the wanted hostname
-2) Create tunneling configuration (if required), to setup and maintain a reverse ssh tunnel to an external server.  This allows remote access to the rPi via an AWS EC2 instance or any other server with a fixed IP address.
+2) Create tunneling configuration (if required), to setup and maintain a reverse ssh tunnel to an external server.  This allows remote access to the rPi via an AWS EC2 instance or any other server with a fixed IP address
 3) Modify .vimrc to support backspace and arrows for up/down etc.
-4) apt update and apt upgrade.
+4) Run apt update and apt upgrade
 5) Install various useful packages (screen, minicom , avahi-deamon, ssmtp, mailutils and others)
-6) setup ssmtp to email kgpython@gmail.com when the device reboots (with the device IP address).
+6) Setup ssmtp to email kgpython@gmail.com when the device reboots (with the device IP address)
 7) Install python pip3
-8) Show instructions for creating device ssh key.
+8) Show instructions for creating device ssh key
 
 ## commissionScript Usage:
 
 ```
-Usage: ./commissionScript.py new_hostname aws_port kgpython_password
+
+Usage: sudo ./commissionScript.py new_hostname aws_port kgpython_password
 
 new_hostname = The new hostname you want to give the rPi
 aws_port = Port number to use for reverse tunnel.  Use 0000 if not required.
 kgpython_password = application password for gmail for kgpython@gmail.com.  See below.
+
 ```
 
 ## Generating an application email password for Gmail
