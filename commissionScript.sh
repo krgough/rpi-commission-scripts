@@ -98,7 +98,7 @@ apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools msmtp msmt
 
 # Setup msmtp
 echo "Setting up /etc/msmtprc for email..."
-cp msmtprc.backup /etc/msmtprc
+cp msmtprc.template /etc/msmtprc
 sed -i "s/<INSERT PASSWORD HERE>/$EMAIL_PASS/" /etc/msmtprc
 
 # Update rc.local to send an email with ip addr on reboot
