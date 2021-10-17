@@ -7,7 +7,7 @@ fi
 
 usage() {
   echo ""
-  echo "Usage: $0 newHostname aws_port kgpython_password"
+  echo "Usage: sudo $0 newHostname aws_port kgpython_password"
   echo ""
   echo "newHostname           Hostname you want to give the new rPI"
   echo "kgpython_password     Password for gmail.  Used for sending emails."
@@ -17,13 +17,7 @@ usage() {
 
 # Check we were given a hostname and email as parameters
 if [ -z $1 ] || [ -z $2 ]; then
-  usage()
-  exit 1
-fi
-
-# Print out help
-if [ $1 == "-h" ]; then
-  usage;
+  usage
   exit 1
 fi
 
@@ -103,6 +97,7 @@ apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools msmtp msmt
 # echo -e "\nAuthUser=$EMAIL\nAuthPass=$EMAIL_PASS\nUseSTARTTLS=YES\nUseTLS=YES" >> $SSMTP_CFG
 
 # Setup msmtp
+echo "Setting up /etc/msmtprc for email..."
 cp msmtprc.backup /etc/msmtprc
 sed -i "s/<INSERT PASSWORD HERE>/$EMAIL_PASS/" /etc/msmtprc
 
