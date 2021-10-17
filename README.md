@@ -133,19 +133,12 @@ UseTLS=YES
 Using email on newer rpi builds. smtp no longer supported so use msmtp instead.
 
 ```
-sudo apt install msmtp msmtp-mta
+sudo apt install msmtp msmtp-mta mailutils
 ```
 
-Put the following into /etc/aliases
 
+### Put the following into /etc/msmtprc 
 ```
-# Send root to
-root: keith.gough@hivehome.com
-# Send cron to
-cron: keith.gough@hivehome.com
-# Send everything else to
-default: keith.gough@hivehome.com
-
 Put the following into /etc/msmtprc 
 # Generics
 defaults
@@ -164,7 +157,7 @@ port           587
 
 from          root@raspi-buster
 user          kgpython@gmail.com
-password      jvwuigwvbmuwwbhh
+password      <INSERT PASSWORD HERE>
 
 # Default
 account default : gmail
