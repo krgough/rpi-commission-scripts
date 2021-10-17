@@ -5,15 +5,32 @@ if [ "$(id -u)" -ne "0" ]; then
     exit 1
 fi
 
-# Setup the correct hostname
-if [ -z $1 ] || [ -z $2 ] || [ -z $3 ]; then
-  echo "usage: $0 newHostname aws_port kgpython_password"
+usage() {
+  echo ""
+  echo "Usage: $0 newHostname aws_port kgpython_password"
+  echo ""
+  echo "newHostname           Hostname you want to give the new rPI"
+  echo "kgpython_password     Password for gmail.  Used for sending emails."
+  echo "aws_port              Optional: Port number on remote server if using reverse tunnel"
+  echo ""
+}
+
+# Check we were given a hostname and email as parameters
+if [ -z $1 ] || [ -z $2 ]; then
+  usage()
   exit 1
 fi
 
+# Print out help
+if [ $1 == "-h" ]; then
+  usage;
+  exit 1
+fi
+
+# Save the parameters to variables
 HN=$1
-AWS_PORT=$2
-EMAIL_PASS=$3
+EMAIL_PASS=$2
+if [ $3 ]; then AWS_PORT=$3; fi
 
 # Change to the wanted working directory
 cd /home/pi/repositories/rpi-commission-scripts
@@ -33,14 +50,18 @@ echo "Removing from /etc/hostname: $resp"
 echo "Adding to /etc/hostname:     $HN"
 echo $HN | sudo tee /etc/hostname > /dev/null
 
-# Create the tunnel.conf file
-echo "Creating tunnel configuration..."
-echo "port="$AWS_PORT"" > /home/pi/repositories/rpi-commission-scripts/tunnel.conf
-echo "server_alias="sniffer_aws"" >> /home/pi/repositories/rpi-commission-scripts/tunnel.conf
+# If user supplied a port number for the tunnel then 
+# we setup the tunnel configuration
+if [ $AWS_PORT ]; then
+  # Create the tunnel.conf file
+  echo "Creating tunnel configuration..."
+  echo "port="$AWS_PORT"" > /home/pi/repositories/rpi-commission-scripts/tunnel.conf
+  echo "server_alias="sniffer_aws"" >> /home/pi/repositories/rpi-commission-scripts/tunnel.conf
 
-# Create a basic crontab with the tunnel task
-echo "Adding tunnel setup to crontab..."
-crontab -u pi /home/pi/repositories/rpi-commission-scripts/crontabBackup.txt
+  # Create a basic crontab with the tunnel task
+  echo "Adding tunnel setup to crontab..."
+  crontab -u pi /home/pi/repositories/rpi-commission-scripts/crontabBackup.txt
+fi
 
 # Check and modify vim settings if required
 echo "Modifying vi config..."
@@ -69,16 +90,21 @@ apt-get -qq clean
 
 apt-get update
 apt-get -y -qq dist-upgrade
-apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools ssmtp mailutils python3-pip rsync
+apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools msmtp msmtp-mta mailutils python3-pip rsync
 # apt-get -y -qq install python3-smbus (depricated in favour of pip3 install smbus2)
 
+# ssmtp is deprecated use msmtp instead (see below)
 # Modify the ssmtp config file
-SSMTP_CFG="/etc/ssmtp/ssmtp.conf"
-EMAIL="kgpython@gmail.com"
-sed -i "s/root=postmaster/root=$EMAIL/" $SSMTP_CFG
-sed -i "s/mailhub=mail/mailhub=smtp.gmail.com:587/" $SSMTP_CFG
-sed -i "s/#FromLineOverride=YES/FromLineOverride=YES/" $SSMTP_CFG
-echo -e "\nAuthUser=$EMAIL\nAuthPass=$EMAIL_PASS\nUseSTARTTLS=YES\nUseTLS=YES" >> $SSMTP_CFG
+# SSMTP_CFG="/etc/ssmtp/ssmtp.conf"
+# EMAIL="kgpython@gmail.com"
+# sed -i "s/root=postmaster/root=$EMAIL/" $SSMTP_CFG
+# sed -i "s/mailhub=mail/mailhub=smtp.gmail.com:587/" $SSMTP_CFG
+# sed -i "s/#FromLineOverride=YES/FromLineOverride=YES/" $SSMTP_CFG
+# echo -e "\nAuthUser=$EMAIL\nAuthPass=$EMAIL_PASS\nUseSTARTTLS=YES\nUseTLS=YES" >> $SSMTP_CFG
+
+# Setup msmtp
+cp msmtprc.backup /etc/msmtprc
+sed -i "s/<INSERT PASSWORD HERE>/$EMAIL_PASS/" /etc/msmtprc
 
 # Update rc.local to send an email with ip addr on reboot
 echo "Updating rc.local to send ip addr email on boot..."
