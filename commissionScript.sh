@@ -83,7 +83,7 @@ apt-get -qq remove --purge libreoffice-* wolfram-engine plymouth nodered sonic-p
 apt-get -qq clean
 
 apt-get update
-apt-get -y -qq dist-upgrade
+apt-get -y -qq full-upgrade
 apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools msmtp msmtp-mta mailutils python3-pip rsync
 # apt-get -y -qq install python3-smbus (depricated in favour of pip3 install smbus2)
 
