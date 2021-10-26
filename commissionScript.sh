@@ -7,7 +7,7 @@ fi
 
 usage() {
   echo ""
-  echo "Usage: sudo $0 newHostname aws_port kgpython_password"
+  echo "Usage: sudo $0 newHostname aws_port email_password"
   echo ""
   echo "newHostname           Hostname you want to give the new rPI"
   echo "kgpython_password     Password for gmail.  Used for sending emails."
