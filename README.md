@@ -17,7 +17,7 @@ Run commissionScript.py to set the following:
 1) Setup the wanted hostname
 2) Create tunneling configuration (if required), to setup and maintain a reverse ssh tunnel to an external server.  This allows remote access to the rPi via an AWS EC2 instance or any other server with a fixed IP address
 3) Modify .vimrc to support backspace and arrows for up/down etc.
-4) Run apt update and apt upgrade
+4) Run apt update and apt full-upgrade
 5) Install various useful packages (screen, minicom , avahi-deamon, ssmtp, mailutils and others)
 6) Setup ssmtp to email kgpython@gmail.com when the device reboots (with the device IP address)
 7) Install python pip3
