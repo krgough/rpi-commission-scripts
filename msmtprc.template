@@ -14,7 +14,7 @@ host           smtp.gmail.com
 port           587
 
 from          root@raspi-buster
-user          kgpython@gmail.com
+user          <INSERT GMAIL EMAIL HERE>
 password      <INSERT PASSWORD HERE>
 
 # Default
