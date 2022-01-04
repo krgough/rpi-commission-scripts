@@ -9,9 +9,7 @@ Usage: ./initial-setup.sh ipaddress_of_rpi
 ```
 
 ## commissionScript.py
-
 Run commissionScript.py to set the following:
-
 1) Setup the wanted hostname
 2) Create tunneling configuration (if required), to setup and maintain a reverse ssh tunnel to an external server.  This allows remote access to the rPi via an AWS EC2 instance or any other server with a fixed IP address
 3) Modify .vimrc to support backspace and arrows for up/down etc.
@@ -21,9 +19,7 @@ Run commissionScript.py to set the following:
 7) Install python pip3
 8) Show instructions for creating device ssh key
 
-&nbsp;
 ## commissionScript Usage:
-
 ```
 Usage: sudo ./commissionScript.py new_hostname aws_port kgpython_password
 
