@@ -1,0 +1,6 @@
+[Unit]
+Description=LED Flash
+
+[Service]
+Type=simple
+ExecStart=/bin/sh -c /home/root/wifiRssi.sh
