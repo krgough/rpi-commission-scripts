@@ -31,7 +31,7 @@ EMAIL_PASS=$3
 if [ $4 ]; then AWS_PORT=$4; fi
 
 # Change to the wanted working directory
-cd /home/pi/repositories/rpi-commission-scripts
+cd /home/pi/repositories/rpi-commission-scripts/
 
 # Modify the /etc/hosts file
 # sendmail needs the <hostname.local> entry
@@ -118,3 +118,7 @@ echo ""
 echo "Reboot the hub first and then sort out the ssh keys"
 echo "Run ssh-keygen to create ssh keys"
 echo "Copy the public key to the aws server authorized_users file for user sniffer-user"
+
+echo
+echo "Put recipient email into /home/pi/repositories/rpi-commisions/userEmail.txt"
+echo
