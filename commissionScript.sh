@@ -7,24 +7,26 @@ fi
 
 usage() {
   echo ""
-  echo "Usage: sudo $0 newHostname email_password aws_port"
+  echo "Usage: sudo $0 newHostname email_username email_password aws_port"
   echo ""
   echo "newHostname           Hostname you want to give the new rPI"
-  echo "kgpython_password     Password for gmail.  Used for sending emails."
+  echo "emailUsername         USername for gmail.  Used for sending emails"
+  echo "emailPassword         Password for gmail.  Used for sending emails."
   echo "aws_port              Optional: Port number on remote server if using reverse tunnel"
   echo ""
 }
 
 # Check we were given a hostname and email as parameters
-if [ -z $1 ] || [ -z $2 ]; then
+if [ -z $1 ] || [ -z $2 ] || [ -z $3 ]; then
   usage
   exit 1
 fi
 
 # Save the parameters to variables
 HN=$1
-EMAIL_PASS=$2
-if [ $3 ]; then AWS_PORT=$3; fi
+EMAIL_USER=$2
+EMAIL_PASS=$3
+if [ $4 ]; then AWS_PORT=$4; fi
 
 # Change to the wanted working directory
 cd /home/pi/repositories/rpi-commission-scripts
@@ -98,6 +100,7 @@ apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools msmtp msmt
 # Setup msmtp
 echo "Setting up /etc/msmtprc for email..."
 cp msmtprc.template /etc/msmtprc
+sed -i "s/<INSERT GMAIL EMAIL HERE>/$EMAIL_USER/" /etc/msmtprc
 sed -i "s/<INSERT PASSWORD HERE>/$EMAIL_PASS/" /etc/msmtprc
 
 # Update rc.local to send an email with ip addr on reboot
