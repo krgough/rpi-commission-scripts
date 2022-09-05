@@ -7,7 +7,7 @@ fi
 
 usage() {
   echo ""
-  echo "Usage: sudo $0 newHostname aws_port email_password"
+  echo "Usage: sudo $0 newHostname email_password aws_port"
   echo ""
   echo "newHostname           Hostname you want to give the new rPI"
   echo "kgpython_password     Password for gmail.  Used for sending emails."
@@ -107,7 +107,7 @@ cat rc.local.backup | sudo tee /etc/rc.local > /dev/null
 
 # Configure Python
 echo "Installing python libs..."
-pip3 install -q redis requests pyserial smbus2
+pip3 install -q requests pyserial smbus2
 
 echo ""
 echo "Reboot the hub first and then sort out the ssh keys"
