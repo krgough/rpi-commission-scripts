@@ -89,6 +89,7 @@ apt-get -qq clean
 apt-get update
 apt-get -y -qq full-upgrade
 apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools msmtp msmtp-mta mailutils rsync
+apt-get -y -qq install python3-pip
 
 # ssmtp is deprecated use msmtp instead (see below)
 # Modify the ssmtp config file
