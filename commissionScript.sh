@@ -31,12 +31,12 @@ cd /home/pi/repositories/rpi-commission-scripts
 
 # Modify the /etc/hosts file
 # sendmail needs the <hostname.local> entry
-hosts="$HN $HN.local"
+#hosts="$HN $HN.local"
 resp=$(grep "127.0.1.1" /etc/hosts)
 echo "Removing from /etc/hosts:    $resp"
 sudo sed -i '/127.0.1.1/d' /etc/hosts
-echo "Adding to /etc/hosts:        127.0.1.1    $hosts"
-echo "127.0.1.1 $hosts" | sudo tee -a /etc/hosts > /dev/null
+echo "Adding to /etc/hosts:        127.0.1.1    $HN"
+echo "127.0.1.1 $HN" | sudo tee -a /etc/hosts > /dev/null
 
 # Modify the /etc/hostname file
 resp=$(cat /etc/hostname)
@@ -84,8 +84,7 @@ apt-get -qq clean
 
 apt-get update
 apt-get -y -qq full-upgrade
-apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools msmtp msmtp-mta mailutils python3-pip rsync
-# apt-get -y -qq install python3-smbus (depricated in favour of pip3 install smbus2)
+apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools msmtp msmtp-mta mailutils rsync
 
 # ssmtp is deprecated use msmtp instead (see below)
 # Modify the ssmtp config file
