@@ -5,8 +5,9 @@ import time
 import RPi.GPIO as GPIO
 
 LED_PIN = 11
+
 ON_TIME = 0.1
-OFF_TIME = 1.9
+OFF_TIME = 2.9
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
@@ -34,15 +35,20 @@ def main():
 
         net_up = check_for_ssid()
 
-        if net_up:
+        if not net_up:
             GPIO.output(LED_PIN, True)
-            time.sleep(ON_TIME + OFF_TIME)
-
+            time.sleep(0.15)
+            GPIO.output(LED_PIN, False)
+            time.sleep(0.2)
+            GPIO.output(LED_PIN, True)
+            time.sleep(0.15)
+            GPIO.output(LED_PIN, False)
+            time.sleep(1.5)
         else:
             GPIO.output(LED_PIN, True)
-            time.sleep(ON_TIME)
+            time.sleep(0.1)
             GPIO.output(LED_PIN, False)
-            time.sleep(OFF_TIME)
+            time.sleep(2.9)
             
     GPIO.cleanup()
 

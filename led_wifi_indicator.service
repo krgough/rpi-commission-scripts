@@ -1,0 +1,12 @@
+[Unit]
+Description=Indicate power up and wifi connection with LED
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+ExecStart=/home/pi/repositories/rpi-commission-scripts/led_wifi_indicator.py
+
+[Install]
+WantedBy=multi-user.target
