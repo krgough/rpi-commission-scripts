@@ -1,0 +1,11 @@
+[Unit]
+Description=Check CPU temperature and send alert email if too hot
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/pi/repositories/rpi-commission-scripts/cpu_temp_check.sh
+
+[Install]
+WantedBy=multi-user.target
