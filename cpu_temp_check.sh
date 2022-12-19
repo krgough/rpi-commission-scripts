@@ -11,7 +11,7 @@ usage () {
 }
 
 if [ -x $1 ]; then
-  TEMP_HIGH=50
+  TEMP_HIGH=80
 else
   if [ $1 = "-h" ]; then
     usage
