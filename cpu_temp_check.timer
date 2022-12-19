@@ -1,10 +1,10 @@
 [Unit]
 Description=Run cpu temperature check every hour
-Requires=cpu_temperature_check.service
+Requires=cpu_temp_check.service
 
 [Timer]
-Unit=cpu_temperature_check.service
+Unit=cpu_temp_check.service
 OnCalendar=hourly
 
 [Install]
-WantedBy-timers.target
+WantedBy=timers.target

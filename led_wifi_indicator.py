@@ -46,9 +46,9 @@ def main():
             time.sleep(1.5)
         else:
             GPIO.output(LED_PIN, True)
-            time.sleep(0.1)
-            GPIO.output(LED_PIN, False)
-            time.sleep(2.9)
+            #time.sleep(0.1)
+            #GPIO.output(LED_PIN, False)
+            #time.sleep(2.9)
             
     GPIO.cleanup()
 
