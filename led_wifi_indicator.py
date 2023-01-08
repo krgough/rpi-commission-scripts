@@ -4,13 +4,12 @@ import subprocess
 import time
 import RPi.GPIO as GPIO
 
-LED_PIN = 11
-
-ON_TIME = 0.1
-OFF_TIME = 2.9
-
 GPIO.setwarnings(False)
+# Use physical pin numbers on the GPIO connector
+# e.g. pin11 (connector pin number) is gpio17 (BCM name)
 GPIO.setmode(GPIO.BOARD)
+
+LED_PIN = 11
 GPIO.setup(LED_PIN, GPIO.OUT)
 
 
