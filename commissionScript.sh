@@ -109,8 +109,8 @@ echo "Updating rc.local to send ip addr email on boot..."
 cat rc.local.backup | sudo tee /etc/rc.local > /dev/null
 
 # Configure Python
-echo "Installing python libs..."
-pip3 install -q requests pyserial smbus2
+# echo "Installing python libs..."
+# pip3 install -q requests pyserial smbus2
 
 echo ""
 echo "Reboot the hub first and then sort out the ssh keys"
