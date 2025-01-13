@@ -81,22 +81,9 @@ done
 
 # Update the distro, remove some junk and install some dependencies
 echo "Updating package files..."
-apt-get -qq remove --purge libreoffice-* wolfram-engine plymouth nodered sonic-pi
-apt-get -qq clean
-
 apt-get update
 apt-get -y -qq full-upgrade
-apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools msmtp msmtp-mta mailutils rsync
-apt-get -y -qq install python3-pip
-
-# ssmtp is deprecated use msmtp instead (see below)
-# Modify the ssmtp config file
-# SSMTP_CFG="/etc/ssmtp/ssmtp.conf"
-# EMAIL="kgpython@gmail.com"
-# sed -i "s/root=postmaster/root=$EMAIL/" $SSMTP_CFG
-# sed -i "s/mailhub=mail/mailhub=smtp.gmail.com:587/" $SSMTP_CFG
-# sed -i "s/#FromLineOverride=YES/FromLineOverride=YES/" $SSMTP_CFG
-# echo -e "\nAuthUser=$EMAIL\nAuthPass=$EMAIL_PASS\nUseSTARTTLS=YES\nUseTLS=YES" >> $SSMTP_CFG
+apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools msmtp msmtp-mta mailutils rsync git picocom
 
 # Setup msmtp
 echo "Setting up /etc/msmtprc for email..."
@@ -107,10 +94,6 @@ sed -i "s/<INSERT PASSWORD HERE>/$EMAIL_PASS/" /etc/msmtprc
 # Update rc.local to send an email with ip addr on reboot
 echo "Updating rc.local to send ip addr email on boot..."
 cat rc.local.backup | sudo tee /etc/rc.local > /dev/null
-
-# Configure Python
-# echo "Installing python libs..."
-# pip3 install -q requests pyserial smbus2
 
 echo ""
 echo "Reboot the hub first and then sort out the ssh keys"
