@@ -83,7 +83,7 @@ done
 echo "Updating package files..."
 apt-get update
 apt-get -y -qq full-upgrade
-apt-get -y -qq install screen avahi-daemon netatalk minicom i2c-tools msmtp msmtp-mta mailutils rsync git picocom
+apt-get -y -qq install screen avahi-daemon minicom i2c-tools msmtp msmtp-mta mailutils rsync git picocom
 
 # Setup msmtp
 echo "Setting up /etc/msmtprc for email..."
