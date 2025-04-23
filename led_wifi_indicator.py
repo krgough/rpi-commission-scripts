@@ -30,7 +30,8 @@ LED_PIN = 11
 GPIO.setup(LED_PIN, GPIO.OUT)
 
 TEST_SERVER = "8.8.8.8"
-TEST_PORT = 80
+TEST_PORT = 53  # DNS port
+CPU_TEMP_LIMIT = 80  # degrees C
 
 
 def get_ssid():
@@ -60,30 +61,7 @@ def get_ip_addr(server: str = TEST_SERVER, port: int = TEST_PORT, timeout: int =
     return {"hostname": hostname, "ip_addr": ip_addr}
 
 
-def check_cpu_temp(last_msg_sent, network, slack_webhooks):
-    """ Check the rpi CPU temperature """
-    try:
-        with open("/sys/class/thermal/thermal_zone0/temp", "r", encoding='utf-8') as f:
-            temp = int(f.read()) / 1000
-            LOGGER.info("CPU temperature: %s", temp)
-    except FileNotFoundError as error:
-        temp = -99
-        LOGGER.error("Error reading CPU temperature: %s", error)
-
-    if temp > 70:
-        LOGGER.warning("CPU temperature is high: %s", temp)
-        if network and time.time() - last_msg_sent > 60:
-            msg = {
-                "hostname": network['hostname'],
-                "message": f"CPU temperature is high: {temp}"
-            }
-            slack_notification(msg=msg, *slack_webhooks)
-            last_msg_sent = time.time()
-
-    return last_msg_sent
-
-
-def slack_notification(msg: dict, *slack_webhooks):
+def slack_notification(*slack_webhooks, msg: dict):
     """ Send a message to slack """
     for hook in slack_webhooks:
         send_slack_message(msg=msg, slack_webhook=hook)
@@ -133,17 +111,22 @@ def main():
 
     if args.trading_slack_enabled:
         LOGGER.info("Trading Slack notifications enabled")
-        trading_slack = dotenv.get_key(dotenv.find_dotenv(), "TRADING_INTRADAY_ALERTS_SLACK_WEBHOOK")
+        trading_slack = dotenv.get_key(
+            dotenv.find_dotenv(raise_error_if_not_found=True),
+            "TRADING_INTRADAY_ALERTS_SLACK_WEBHOOK"
+        )
         slack_webhooks.append(trading_slack)
 
     if args.kg_slack_enabled:
         LOGGER.info("KG Slack notifications enabled")
-        kg_slack = dotenv.get_key(dotenv.find_dotenv(), "KG_SLACK_WEBHOOK")
+        kg_slack = dotenv.get_key(
+            dotenv.find_dotenv(raise_error_if_not_found=True),
+            "KG_SLACK_WEBHOOK"
+        )
         slack_webhooks.append(kg_slack)
 
     network = get_ip_addr()
     last_check_time = time.time()
-    last_cpu_temp_msg_time = 0
 
     if network:
         LOGGER.info("Network is up: %s", network)
@@ -158,13 +141,7 @@ def main():
         # Every so often check the network state and CPU temperature
         if time.time() - last_check_time > 30:
             last_check_time = time.time()
-            # network_state = is_network_up()
             network = get_ip_addr()
-            last_cpu_temp_msg_time = check_cpu_temp(
-                last_msg_sent=last_cpu_temp_msg_time,
-                network=network,
-                slack_webhooks=slack_webhooks
-            )
 
         if state == "network_down":
             double_flash()

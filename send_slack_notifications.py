@@ -36,8 +36,6 @@ def send_slack_message(msg: dict, slack_webhook: str):
         LOGGER.error(
             "Error sending message to Slack: %s, %s", response.status_code, response.text
         )
-    else:
-        LOGGER.info("Message sent to Slack: %s", msg)
 
 
 def get_args():
