@@ -17,10 +17,7 @@ import dotenv
 from RPi import GPIO
 
 from send_slack_notifications import send_slack_message
-
-
 LOGGER = logging.getLogger(__name__)
-dotenv.load_dotenv()
 
 GPIO.setwarnings(False)
 # Use physical pin numbers on the GPIO connector
