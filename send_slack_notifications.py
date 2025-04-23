@@ -1,6 +1,7 @@
 #! /usr/bin/env Python3
 
 """
+
 Sends notification on Slack using a webhook URL
 
 """
