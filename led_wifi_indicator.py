@@ -7,7 +7,7 @@ This script uses a GPIO pin to control an LED that indicates the status of a WiF
 If we have a slack channel set we also send a message to the channel.
 
 """
-from argparse import ArgumentParser
+
 import logging
 import subprocess
 import socket
@@ -84,43 +84,23 @@ def single_flash():
     time.sleep(2.9)
 
 
-def get_args():
-    """ Get command line arguments """
-    parser = ArgumentParser(description="LED Indicator for WiFi Connection")
-    parser.add_argument(
-        "-t", "--trading_slack_enabled",
-        action="store_true",
-        help="Enable Slack notifications to trading slack webhook- put webhooks in .env file",
-    )
-    parser.add_argument(
-        "-k", "--kg_slack_enabled",
-        action="store_true",
-        help="Enable Slack notifications to kg slack webhook- put webhooks in .env file",
-    )
-    return parser.parse_args()
-
-
 def main():
     """ Indicate the status of the network connection """
-    args = get_args()
 
     slack_webhooks = []
+    slack_webhook_names = dotenv.get_key(
+        dotenv.find_dotenv(raise_error_if_not_found=True),
+        "SLACK_WEBHOOKS"
+    )
 
-    if args.trading_slack_enabled:
-        LOGGER.info("Trading Slack notifications enabled")
-        trading_slack = dotenv.get_key(
-            dotenv.find_dotenv(raise_error_if_not_found=True),
-            "TRADING_INTRADAY_ALERTS_SLACK_WEBHOOK"
-        )
-        slack_webhooks.append(trading_slack)
-
-    if args.kg_slack_enabled:
-        LOGGER.info("KG Slack notifications enabled")
-        kg_slack = dotenv.get_key(
-            dotenv.find_dotenv(raise_error_if_not_found=True),
-            "KG_SLACK_WEBHOOK"
-        )
-        slack_webhooks.append(kg_slack)
+    if slack_webhook_names:
+        for webhook_name in slack_webhook_names.split(','):
+            LOGGER.info("Adding slack notification webhook: %s", webhook_name)
+            webhook = dotenv.get_key(dotenv.find_dotenv(), webhook_name)
+            if webhook:
+                slack_webhooks.append(webhook.strip())
+    else:
+        LOGGER.info("No slack webhooks found")
 
     network = get_ip_addr()
     last_check_time = time.time()
@@ -145,9 +125,8 @@ def main():
             if network:
                 state = "network_up"
                 LOGGER.info("Network is up: %s", network)
-                if args.slack_enabled:
-                    msg = {"hostname": network['hostname'], "message": f"IP: {network['ip_addr']}"}
-                    slack_notification(msg=msg, *slack_webhooks)
+                msg = {"hostname": network['hostname'], "message": f"IP: {network['ip_addr']}"}
+                slack_notification(msg=msg, *slack_webhooks)
 
         elif state == "network_up":
             single_flash()

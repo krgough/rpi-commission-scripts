@@ -6,7 +6,6 @@ Check the CPU temperature and send a slack notification if it exceeds a threshol
 
 """
 
-from argparse import ArgumentParser
 import logging
 import os
 import socket
@@ -18,7 +17,7 @@ from send_slack_notifications import send_slack_message
 
 LOGGER = logging.getLogger(__name__)
 
-CPU_TEMP_LIMIT = 50  # CPU temperature limit in Celsius
+CPU_TEMP_LIMIT = 80  # CPU temperature limit in Celsius
 NOTIFICATION_LAST_SENT_FILE = "/tmp/cpu_temp_notification_last_sent"
 
 
@@ -64,46 +63,28 @@ def check_cpu_temp(slack_webhooks):
         LOGGER.info("CPU temperature: %s", temp)
 
 
-def get_args():
-    """ Get command line arguments """
-    parser = ArgumentParser(description="LED Indicator for WiFi Connection")
-    parser.add_argument(
-        "-t", "--trading_slack_enabled",
-        action="store_true",
-        help="Enable Slack notifications to trading slack webhook- put webhooks in .env file",
-    )
-    parser.add_argument(
-        "-k", "--kg_slack_enabled",
-        action="store_true",
-        help="Enable Slack notifications to kg slack webhook- put webhooks in .env file",
-    )
-    return parser.parse_args()
-
-
 def main():
     """ Entry point """
-    args = get_args()
     logging.basicConfig(level=logging.INFO)
 
     LOGGER.info("Starting CPU temperature check")
 
     # Load webhooks from environment variables
     slack_webhooks = []
-    if args.trading_slack_enabled:
-        LOGGER.info("Trading Slack notifications enabled")
-        trading_slack = dotenv.get_key(
-            dotenv.find_dotenv(raise_error_if_not_found=True),
-            "TRADING_INTRADAY_ALERTS_SLACK_WEBHOOK"
-        )
-        slack_webhooks.append(trading_slack)
 
-    if args.kg_slack_enabled:
-        LOGGER.info("KG Slack notifications enabled")
-        kg_slack = dotenv.get_key(
-            dotenv.find_dotenv(raise_error_if_not_found=True),
-            "KG_SLACK_WEBHOOK"
-        )
-        slack_webhooks.append(kg_slack)
+    slack_webhook_names = dotenv.get_key(
+        dotenv.find_dotenv(raise_error_if_not_found=True),
+        "SLACK_WEBHOOKS"
+    )
+
+    if slack_webhook_names:
+        for webhook_name in slack_webhook_names.split(","):
+            LOGGER.info("Adding slack notification webhook: %s", webhook_name)
+            webhook = dotenv.get_key(dotenv.find_dotenv(), webhook_name.strip())
+            if webhook:
+                slack_webhooks.append(webhook)
+    else:
+        LOGGER.warning("No slack webhooks found in environment variables")
 
     check_cpu_temp(slack_webhooks)
 
