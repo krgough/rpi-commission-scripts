@@ -5,7 +5,8 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/home/pi/repositories/rpi-commission-scripts/venv/bin/python3 /home/pi/repositories/rpi-commission-scripts/cpu_temp_check.py
+WorkingDirectory=/home/pi/repositories/rpi-commission-scripts
+ExecStart=/home/pi/repositories/rpi-commission-scripts/venv/bin/python3 -m cpu_temp_check.cpu_temp_check
 
 [Install]
 WantedBy=multi-user.target

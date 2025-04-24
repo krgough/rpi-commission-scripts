@@ -13,7 +13,7 @@ import time
 
 import dotenv
 
-from rpi_commission_scripts.utils.send_slack_notifications import send_slack_message
+from utils.send_slack_notifications import send_slack_message
 
 LOGGER = logging.getLogger(__name__)
 
