@@ -6,7 +6,8 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=always
 RestartSec=10
-ExecStart=/home/pi/repositories/rpi-commission-scripts/led_wifi_indicator.py
+WorkingDirectory=/home/pi/repositories/rpi-commission-scripts
+ExecStart=venv/bin/python3 -m led_wifi_indicator_service.led_wifi_indicator
 
 [Install]
 WantedBy=multi-user.target

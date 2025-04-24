@@ -13,7 +13,7 @@ import time
 
 import dotenv
 
-from send_slack_notifications import send_slack_message
+from rpi_commission_scripts.utils.send_slack_notifications import send_slack_message
 
 LOGGER = logging.getLogger(__name__)
 
@@ -47,6 +47,8 @@ def check_cpu_temp(slack_webhooks):
             last_msg_sent = 0
 
         LOGGER.warning("CPU temperature is high: %s", temp)
+
+        # Send a notification if one not sent recently
         if time.time() - last_msg_sent > 60 * 60:
             msg = {
                 "hostname": socket.gethostname(),

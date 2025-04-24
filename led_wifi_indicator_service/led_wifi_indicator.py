@@ -16,7 +16,9 @@ import time
 import dotenv
 from RPi import GPIO
 
-from send_slack_notifications import send_slack_message
+from utils import send_slack_notifications as slack
+
+
 LOGGER = logging.getLogger(__name__)
 
 GPIO.setwarnings(False)
@@ -61,7 +63,7 @@ def get_ip_addr(server: str = TEST_SERVER, port: int = TEST_PORT, timeout: int =
 def slack_notification(*slack_webhooks, msg: dict):
     """ Send a message to slack """
     for hook in slack_webhooks:
-        send_slack_message(msg=msg, slack_webhook=hook)
+        slack.send_slack_message(msg=msg, slack_webhook=hook)
 
 
 def double_flash():
@@ -83,10 +85,8 @@ def single_flash():
     GPIO.output(LED_PIN, False)
     time.sleep(2.9)
 
-
-def main():
-    """ Indicate the status of the network connection """
-
+def get_slack_webhooks():
+    """ Get the webhooks from .env file """
     slack_webhooks = []
     slack_webhook_names = dotenv.get_key(
         dotenv.find_dotenv(raise_error_if_not_found=True),
@@ -101,6 +101,12 @@ def main():
                 slack_webhooks.append(webhook.strip())
     else:
         LOGGER.info("No slack webhooks found")
+    return slack_webhooks
+
+
+def main():
+    """ Indicate the status of the network connection """
+    slack_webhooks = get_slack_webhooks()
 
     network = get_ip_addr()
     last_check_time = time.time()

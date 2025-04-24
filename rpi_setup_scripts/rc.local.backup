@@ -19,7 +19,7 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 
   # KG: Adding this to email out IP address on reboot
-  /home/pi/repositories/rpi-commission-scripts/ip_mailer.sh
+  /home/pi/repositories/rpi-commission-scripts/rpi_setup_scripts/ip_mailer.sh
 fi
 
 exit 0
