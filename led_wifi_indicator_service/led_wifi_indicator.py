@@ -85,6 +85,7 @@ def single_flash():
     GPIO.output(LED_PIN, False)
     time.sleep(2.9)
 
+
 def get_slack_webhooks():
     """ Get the webhooks from .env file """
     slack_webhooks = []
