@@ -21,7 +21,7 @@ RPI_USER=$(logname)
 
 SERVICE_FILE="/etc/systemd/system/tunnel.service"
 
-cp tunnel.service.template $SERVICE_FILE
+cp files/tunnel.service.template $SERVICE_FILE
 
 sed -i "s/BASTION_PORT/$BASTION_PORT/g" $SERVICE_FILE
 sed -i "s/BASTION_USER/$BASTION_USER/g" $SERVICE_FILE
