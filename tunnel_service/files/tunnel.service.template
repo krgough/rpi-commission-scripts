@@ -4,7 +4,7 @@ After=network-online.target
 
 [Service]
 Environment="AUTOSSH_GATETIME=0"
-ExecStart=/usr/bin/autossh -M 0 -N -R BASTION_PORT:localhost:22 BASTION_USER@BASTION_URL
+ExecStart=/usr/bin/autossh -M 0 -N -o "ExitOnForwardFailure=yes" -R 8080:localhost:22 keith@18.171.220.101
 User=RPI_USER
 
 [Install]
