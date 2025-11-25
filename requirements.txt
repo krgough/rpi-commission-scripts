@@ -1,1 +1,3 @@
 python-dotenv
+rpi-lgpio
+requests

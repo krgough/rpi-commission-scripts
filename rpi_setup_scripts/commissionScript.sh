@@ -84,6 +84,8 @@ echo "Updating package files..."
 apt-get update
 apt-get -y -qq full-upgrade
 apt-get -y -qq install screen avahi-daemon minicom i2c-tools msmtp msmtp-mta mailutils rsync git picocom
+# Required to install rpi-lgpio later
+apt-get -y -qq install swig python3-dev liblgpio-dev
 
 # Setup msmtp
 echo "Setting up /etc/msmtprc for email..."
