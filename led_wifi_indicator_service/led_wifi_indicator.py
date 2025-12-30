@@ -22,12 +22,8 @@ from utils import send_slack_notifications as slack
 LOGGER = logging.getLogger(__name__)
 
 GPIO.setwarnings(False)
-# Use physical pin numbers on the GPIO connector
-# e.g. pin11 (connector pin number) is gpio17 (BCM name)
-GPIO.setmode(GPIO.BOARD)
-LED_PIN = 11
-GPIO.setup(LED_PIN, GPIO.OUT)
 
+# Server we try to connect to, in order to check network connectivity
 TEST_SERVER = "8.8.8.8"
 TEST_PORT = 53  # DNS port
 CPU_TEMP_LIMIT = 80  # degrees C
@@ -66,23 +62,23 @@ def slack_notification(*slack_webhooks, msg: dict):
         slack.send_slack_message(msg=msg, slack_webhook=hook)
 
 
-def double_flash():
+def double_flash(led_pin: int):
     """ Flash LED twice """
-    GPIO.output(LED_PIN, True)
+    GPIO.output(led_pin, True)
     time.sleep(0.15)
-    GPIO.output(LED_PIN, False)
+    GPIO.output(led_pin, False)
     time.sleep(0.2)
-    GPIO.output(LED_PIN, True)
+    GPIO.output(led_pin, True)
     time.sleep(0.15)
-    GPIO.output(LED_PIN, False)
+    GPIO.output(led_pin, False)
     time.sleep(1.5)
 
 
-def single_flash():
+def single_flash(led_pin: int):
     """ Flash LED once """
-    GPIO.output(LED_PIN, True)
+    GPIO.output(led_pin, True)
     time.sleep(0.1)
-    GPIO.output(LED_PIN, False)
+    GPIO.output(led_pin, False)
     time.sleep(2.9)
 
 
@@ -109,6 +105,18 @@ def main():
     """ Indicate the status of the network connection """
     slack_webhooks = get_slack_webhooks()
 
+    led_pin = dotenv.get_key(dotenv.find_dotenv(), "LED_WIFI_INDICATOR_GPIO")
+    if not led_pin:
+        LOGGER.warning("No LED_WIFI_INDICATOR_GPIO found in .env file), exiting")
+        return
+
+    LOGGER.info("Using LED on GPIO pin: %s", led_pin)
+
+    # Use physical pin numbers on the GPIO connector
+    # e.g. pin11 (connector pin number) is gpio17 (BCM name)
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(led_pin, GPIO.OUT)
+
     network = get_ip_addr()
     last_check_time = time.time()
 
@@ -128,7 +136,7 @@ def main():
             network = get_ip_addr()
 
         if state == "network_down":
-            double_flash()
+            double_flash(led_pin=led_pin)
             if network:
                 state = "network_up"
                 LOGGER.info("Network is up: %s", network)
@@ -136,7 +144,7 @@ def main():
                 slack_notification(msg=msg, *slack_webhooks)
 
         elif state == "network_up":
-            single_flash()
+            single_flash(led_pin=led_pin)
             if network is None:
                 state = "network_down"
                 LOGGER.info("Network is down")
