@@ -2,11 +2,6 @@
 
 set -e
 
-if [ "$(id -u)" -ne "0" ]; then
-    echo "This script must be executed with root privileges"
-    exit 1
-fi
-
 sudo apt update
 sudo apt -y full-upgrade
 
@@ -24,9 +19,11 @@ PYENV_CONFIG_FILE="$SCRIPT_DIR/.pyenvrc"
 LOADER_LINE="[[ -f $PYENV_CONFIG_FILE ]] && source $PYENV_CONFIG_FILE"
 
 if ! grep -Fq "$LOADER_LINE" ~/.bashrc; then
-    echo -e "\n# Load pyenv configuration\n$LOADER_LINE" >> ~/.bashrc
+    echo -e "\n# Load pyenv configuration\n$LOADER_LINE\n" >> ~/.bashrc
     echo "Added loader to ~/.bashrc"
 else
     echo "Loader already exists in ~/.bashrc"
 fi
+
+source ~/.bashrc
 
