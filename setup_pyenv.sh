@@ -19,7 +19,7 @@ PYENV_CONFIG_FILE="$SCRIPT_DIR/.pyenvrc"
 LOADER_LINE="[[ -f $PYENV_CONFIG_FILE ]] && source $PYENV_CONFIG_FILE"
 
 if ! grep -Fq "$LOADER_LINE" ~/.bashrc; then
-    echo -e "\n# Load pyenv configuration\n$LOADER_LINE\n" >> ~/.bashrc
+    echo -e "\n# Load pyenv configuration\ncd $HOME\n$LOADER_LINE\n" >> ~/.bashrc
     echo "Added loader to ~/.bashrc"
 else
     echo "Loader already exists in ~/.bashrc"
