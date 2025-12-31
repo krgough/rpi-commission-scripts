@@ -25,5 +25,6 @@ else
     echo "Loader already exists in ~/.bashrc"
 fi
 
-source ~/.bashrc
+echo -e "\nAll Done"
+echo -e "run \"source ~/.bashrc\" to enable pyenv in your shell\n"
 
