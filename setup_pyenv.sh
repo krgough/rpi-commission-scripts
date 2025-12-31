@@ -25,6 +25,14 @@ else
     echo "Loader already exists in ~/.bashrc"
 fi
 
-echo -e "\nAll Done"
-echo -e "run \"source ~/.bashrc\" to enable pyenv in your shell\n"
-
+echo -e "\nAll Done\n"
+echo -e "Run this command to enable pyenv in your shell\n"
+echo -e "source ~/.bashrc\n"
+echo -e "Install a new python verison using this command...\n"
+echo -e "env PYTHON_CONFIGURE_OPTS=\"--enable-optimizations --with-lto\" \\"
+echo -e "    PYTHON_CFLAGS=\"-march=native -mtune=native\" \\"
+echo -e "    MAKE_OPTS=\"-j$(nproc)\" \\"
+echo -e "    pyenv install 3.14.0"
+echo -e "\n"
+echo -e "Set the global python version using this command...\n"
+echo -e "pyenv global 3.14.0"
