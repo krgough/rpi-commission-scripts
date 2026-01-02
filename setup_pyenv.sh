@@ -11,14 +11,13 @@ libbz2-dev libreadline-dev libsqlite3-dev curl git \
 libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
 libffi-dev liblzma-dev
 
-curl https://pyenv.run | bash
+# curl https://pyenv.run | bash
 
 # Move the .pyenvrc to the $HOME directory
 cp .pyenvrc $HOME/.pyenvrc
 
 # Add the "loader" line to .bashrc ONLY if it's not already there
-PYENV_CONFIG_FILE="$HOME/.pyenvrc"
-LOADER_LINE="[[ -f $PYENV_CONFIG_FILE ]] && source $PYENV_CONFIG_FILE"
+LOADER_LINE="source $HOME/.pyenvrc"
 
 if ! grep -Fq "$LOADER_LINE" ~/.bashrc; then
     echo -e "\n# Load pyenv configuration\n$LOADER_LINE\n" >> ~/.bashrc
