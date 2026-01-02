@@ -109,6 +109,7 @@ def main():
     if not led_pin:
         LOGGER.warning("No LED_WIFI_INDICATOR_GPIO found in .env file), exiting")
         return
+    led_pin = int(led_pin)
 
     LOGGER.info("Using LED on GPIO pin: %s", led_pin)
 
