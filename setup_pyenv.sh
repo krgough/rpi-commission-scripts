@@ -13,13 +13,15 @@ libffi-dev liblzma-dev
 
 curl https://pyenv.run | bash
 
+# Move the .pyenvrc to the $HOME directory
+cp .pyenvrc $HOME/.pyenvrc
+
 # Add the "loader" line to .bashrc ONLY if it's not already there
-SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
-PYENV_CONFIG_FILE="$SCRIPT_DIR/.pyenvrc"
+PYENV_CONFIG_FILE="$HOME/.pyenvrc"
 LOADER_LINE="[[ -f $PYENV_CONFIG_FILE ]] && source $PYENV_CONFIG_FILE"
 
 if ! grep -Fq "$LOADER_LINE" ~/.bashrc; then
-    echo -e "\n# Load pyenv configuration\ncd $HOME\n$LOADER_LINE\n" >> ~/.bashrc
+    echo -e "\n# Load pyenv configuration\n$LOADER_LINE\n" >> ~/.bashrc
     echo "Added loader to ~/.bashrc"
 else
     echo "Loader already exists in ~/.bashrc"
