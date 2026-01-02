@@ -11,7 +11,7 @@ libbz2-dev libreadline-dev libsqlite3-dev curl git \
 libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
 libffi-dev liblzma-dev
 
-# curl https://pyenv.run | bash
+curl https://pyenv.run | bash
 
 # Move the .pyenvrc to the $HOME directory
 cp .pyenvrc $HOME/.pyenvrc
