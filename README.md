@@ -171,6 +171,12 @@ To enable logging in as a `pi` user makes the following changes after installing
     User=pi
     ```
 
+    One line command to insert the above User into the file...
+
+    ```bash
+    sudo sed -i '/\[Service\]/a User=pi' /etc/systemd/system/dwagent.service
+    ```
+
 3. Reload and restart:
 
     ```bash
