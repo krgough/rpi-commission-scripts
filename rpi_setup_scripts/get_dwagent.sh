@@ -31,5 +31,9 @@ done
 wget -O $HOME/dwagent.sh https://www.dwservice.net/download/dwagent.sh
 chmod +x $HOME/dwagent.sh
 
+echo
+echo "After running the script to install dwservice then if you want to login as a user other than root"
+echo "then see instaructions in README.md"
+echo
 echo "all done"
 echo
