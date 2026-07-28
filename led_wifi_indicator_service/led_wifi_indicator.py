@@ -39,19 +39,23 @@ def get_ssid():
     return essid
 
 
-def get_ip_addr(server: str = TEST_SERVER, port: int = TEST_PORT, timeout: int = 3) -> bool:
+def get_ip_addr(server: str = TEST_SERVER, port: int = TEST_PORT, timeout: int = 3, retries: int = 3) -> bool:
     """ping server"""
-    try:
-        socket.setdefaulttimeout(timeout)
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((server, port))
-        ip_addr = s.getsockname()[0]
-        hostname = socket.gethostname()
-        s.close()
-    except OSError as error:
-        LOGGER.debug("Error connecting to %s:%s - %s", server, port, error)
-        s.close()
-        return None
+    for _ in range(retries):
+        try:
+            socket.setdefaulttimeout(timeout)
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect((server, port))
+            ip_addr = s.getsockname()[0]
+            hostname = socket.gethostname()
+            s.close()
+        except OSError as error:
+            LOGGER.debug("Error connecting to %s:%s - %s", server, port, error)
+            hostname = None
+            ip_addr = None
+
+        if ip_addr:
+            break
 
     return {"hostname": hostname, "ip_addr": ip_addr}
 
@@ -109,6 +113,7 @@ def main():
     if not led_pin:
         LOGGER.warning("No LED_WIFI_INDICATOR_GPIO found in .env file), exiting")
         return
+    led_pin = int(led_pin)
 
     LOGGER.info("Using LED on GPIO pin: %s", led_pin)
 
