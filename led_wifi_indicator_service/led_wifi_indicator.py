@@ -109,7 +109,7 @@ def main():
     """ Indicate the status of the network connection """
     slack_webhooks = get_slack_webhooks()
 
-    led_pin = int(dotenv.get_key(dotenv.find_dotenv(), "LED_WIFI_INDICATOR_GPIO"))
+    led_pin = dotenv.get_key(dotenv.find_dotenv(), "LED_WIFI_INDICATOR_GPIO")
     if not led_pin:
         LOGGER.warning("No LED_WIFI_INDICATOR_GPIO found in .env file), exiting")
         return
